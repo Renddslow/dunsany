@@ -2,7 +2,10 @@
   "compilerOptions": {
     "outDir": "compiled",
     "target": "es2018",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "module": "es6"
   },
   "include": ["src"]
 }

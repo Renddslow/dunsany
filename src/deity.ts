@@ -2,6 +2,7 @@ import cuid from 'cuid';
 
 import archetypes, { Archetype } from './archetypes';
 import { RelationshipTypes } from './relationships';
+import generateName from './lib/generateName';
 import d from './utils/d';
 
 const genders = ['male', 'female', 'hermaphrodite', 'none'] as const;
@@ -36,10 +37,9 @@ export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): 
   const archetype = archetypes[d(archetypes.length) - 1];
 
   // TODO: create backstory
-  // TODO: generate name
 
   return {
-    name: '',
+    name: generateName(),
     gender,
     archetype,
     relationships: [],

@@ -2,17 +2,21 @@
   "devDependencies": {
     "@dmsi/prettier-config": "^1.3.0",
     "@types/cuid": "^1.3.0",
+    "@types/node": "^13.1.4",
+    "@types/random-item": "^2.0.0",
+    "ava": "^2.4.0",
     "del-cli": "^3.0.0",
     "husky": "^4.0.0",
     "lint-staged": "^9.5.0",
     "microbundle": "^0.11.0",
     "prettier": "^1.19.1",
+    "ts-node": "^8.5.4",
     "typescript": "^3.7.4"
   },
   "name": "dunsany",
   "version": "0.0.0",
   "description": "A procedural pantheon generator.",
-  "repository": "https://github.com/Renddslow/dunsaney",
+  "repository": "https://github.com/Renddslow/dunsany",
   "author": "Matt McElwee <mubatt@wyopub.com>",
   "license": "CC-BY-NC-SA-2.0",
   "prettier": "@dmsi/prettier-config",
@@ -28,17 +32,36 @@
     ]
   },
   "scripts": {
-    "prebuild": "del-cli dist compile",
-    "build": "tsc && microbundle",
-    "postbuild": "del-cli compile",
-    "prettier": "prettier *.{js,css,json,md,ts,tsx} --write"
+    "prebuild": "del-cli dist compiled",
+    "build": "tsc && microbundle --external=true",
+    "postbuild": "del-cli compiled",
+    "test": "ava",
+    "prettier": "prettier *.{js,css,json,md,ts,tsx} --write",
+    "declare": "tsc -d"
   },
   "types": "dist",
   "dependencies": {
-    "cuid": "^2.1.8"
+    "cuid": "^2.1.8",
+    "random-item": "^3.0.0",
+    "titleize": "^2.1.0"
   },
   "main": "dist/index.js",
   "umd:main": "dist/index.umd.js",
   "module": "dist/index.mjs",
-  "source": "src/index.js"
+  "source": "compiled/index.js",
+  "ava": {
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "concurrency": 4,
+    "timeout": "1m",
+    "babel": false,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
 }
