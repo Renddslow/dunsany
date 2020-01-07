@@ -22,7 +22,7 @@
   },
   "lint-staged": {
     "*.{js,css,json,md,ts,tsx}": [
-      "prettier --with-node-modules --write",
+      "prettier --write",
       "git add"
     ]
   },
