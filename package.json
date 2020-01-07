@@ -27,7 +27,8 @@
     ]
   },
   "scripts": {
-    "build": "del-cli dist && tsc"
+    "build": "del-cli dist && tsc",
+    "prettier": "prettier *.{js,css,json,md,ts,tsx} --write"
   },
   "types": "dist"
 }
