@@ -1,11 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "compiled",
+    "outDir": "dist",
     "target": "es2018",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "module": "es6"
+    "module": "commonjs",
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*", "src/types/*"]
+    },
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": ["src"]
+  "include": ["src/**/*"]
 }

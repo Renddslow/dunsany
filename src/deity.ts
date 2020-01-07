@@ -48,7 +48,7 @@ export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): 
     characteristics: {
       real: d(50) !== 50,
       reliability: Math.random(),
-      dead: d(100) !== 100,
+      dead: d(100) === 100,
     },
   };
 };
