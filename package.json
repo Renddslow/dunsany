@@ -1,0 +1,33 @@
+{
+  "devDependencies": {
+    "@dmsi/prettier-config": "^1.3.0",
+    "del-cli": "^3.0.0",
+    "husky": "^4.0.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
+  },
+  "name": "dunsany",
+  "version": "0.0.0",
+  "description": "A procedural pantheon generator.",
+  "main": "src/index.js",
+  "repository": "https://github.com/Renddslow/dunsaney",
+  "author": "Matt McElwee <mubatt@wyopub.com>",
+  "license": "CC-BY-NC-SA-2.0",
+  "prettier": "@dmsi/prettier-config",
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,css,json,md,ts,tsx}": [
+      "prettier --with-node-modules --write",
+      "git add"
+    ]
+  },
+  "scripts": {
+    "build": "del-cli dist && tsc"
+  },
+  "types": "dist"
+}
