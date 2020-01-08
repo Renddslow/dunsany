@@ -32,7 +32,7 @@ export const createRelationships = (deities: Array<Deity>, seed: string) => {
 
   // Identify all the men
   const potentialFathers = deities.filter(({ gender }) => gender === 'male');
-  // console.log(potentialFathers);
+  console.log(potentialFathers);
 
   // start off with the family so we don't accidentally get overlaps
   // commit family nodes

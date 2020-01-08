@@ -12,7 +12,6 @@ export interface Deity {
   name: string;
   archetype: Archetype;
   relationships?: Array<Relationship>;
-  backstory: string;
   id: string;
   gender: typeof genders[number];
   characteristics: {
@@ -39,15 +38,12 @@ export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): 
     : archetypes.filter((a) => !currentArchetypes.includes(a));
   const archetype = pick(availableArchetypes, seed);
 
-  // TODO: create backstory
-
   return {
     name: generateName(seed),
     gender: pick(genders, seed),
     archetype,
     relationships: [],
     id: cuid(),
-    backstory: '',
     characteristics: {
       real: d(50, seed) !== 50,
       reliability: Math.random(),

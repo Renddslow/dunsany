@@ -1,3 +1,5 @@
+import sower from 'sower';
+
 import pick from './utils/pick';
 import d from './utils/d';
 import { createDeity, Deity } from './deity';
@@ -16,7 +18,7 @@ interface Pantheon {
   seed: string;
 }
 
-const createPantheon = (seed: string): Pantheon => {
+const createPantheon = (seed: string = sower.silly()): Pantheon => {
   const pantheonSize = d(50, seed); // This is a nice round number just under the number of archetypes
 
   const deities = Array(pantheonSize)
@@ -40,4 +42,4 @@ const createPantheon = (seed: string): Pantheon => {
   };
 };
 
-console.log(createPantheon('cowboy-chicken-chainsaw'));
+console.log(createPantheon());

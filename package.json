@@ -44,6 +44,7 @@
   "dependencies": {
     "cuid": "^2.1.8",
     "seedrandom": "^3.0.5",
+    "sower": "^0.1.0",
     "titleize": "^2.1.0"
   },
   "main": "dist/index.js",
