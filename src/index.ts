@@ -1,4 +1,4 @@
-import random from './utils/pick';
+import pick from './utils/pick';
 import d from './utils/d';
 import { createDeity, Deity } from './deity';
 import { createRelationships } from './relationships';
@@ -27,16 +27,15 @@ const createPantheon = (seed: string): Pantheon => {
       return acc;
     }, []);
 
-  const chief: Deity = random(deities, seed);
+  const chief: Deity = pick(deities, seed);
 
   createRelationships(deities, seed);
 
-  // TODO: create relationships between deities
   return {
     deities,
     chief: deities.length > 2 ? chief.id : null, // @ts-ignore
-    age: random(ages, seed),
-    disposition: random(dispositions, seed),
+    age: pick(ages, seed),
+    disposition: pick(dispositions, seed),
     seed,
   };
 };

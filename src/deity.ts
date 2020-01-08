@@ -4,7 +4,7 @@ import archetypes, { Archetype } from './archetypes';
 import { RelationshipTypes } from './relationships';
 import generateName from './lib/generateName';
 import d from './utils/d';
-import random from './utils/pick';
+import pick from './utils/pick';
 
 const genders = ['male', 'female', 'hermaphrodite', 'none'] as const;
 
@@ -33,18 +33,17 @@ export interface Relationship {
 }
 
 export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): Deity => {
-  // TODO: seed
   const canHaveRival = d(30, seed) === 30;
   const availableArchetypes = canHaveRival
     ? archetypes
     : archetypes.filter((a) => !currentArchetypes.includes(a));
-  const archetype = random(availableArchetypes, seed);
+  const archetype = pick(availableArchetypes, seed);
 
   // TODO: create backstory
 
   return {
     name: generateName(seed),
-    gender: random(genders, seed),
+    gender: pick(genders, seed),
     archetype,
     relationships: [],
     id: cuid(),
