@@ -1,7 +1,7 @@
-import random from 'random-item';
 import titleize from 'titleize';
 
 import d from '../utils/d';
+import random from '../utils/pick';
 import { ALLOWED_SIBLINGS } from './allowedLetters';
 
 const VOWELS = ['a', 'e', 'i', 'o', 'u'];
@@ -30,7 +30,7 @@ const getNextLetter = (max: number, seed: string) => (
 
   if (prev === `'`) {
     const allowedLetters = Object.keys(ALLOWED_SIBLINGS);
-    const next = allowedLetters[d(allowedLetters.length, seed) - 1];
+    const next = random(allowedLetters, seed);
     return name + next;
   }
 
@@ -50,7 +50,7 @@ const getNextLetter = (max: number, seed: string) => (
 
   if (!siblingOptions.length) return name;
 
-  const next = random(siblingOptions) || '';
+  const next = random(siblingOptions, seed) || '';
 
   return name + next;
 };
@@ -59,7 +59,7 @@ const generateName = (seed): string => {
   const max = d(8, seed) + 3;
 
   const allowedLetters = Object.keys(ALLOWED_SIBLINGS);
-  const firstLetter = random(allowedLetters).toUpperCase();
+  const firstLetter = random(allowedLetters, seed).toUpperCase();
 
   const name = Array(max)
     .fill(null)

@@ -384,13 +384,6 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/random-item@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@types/random-item/-/random-item-2.0.0.tgz#ec6ab4c5bb37920899a698904c85aed07b87d726"
-  integrity sha512-5ZmSAb28Y4pHLHsNPotK23ONR7Hm+XQ28Q+2edS+2EYq+82KC4WPk2YDCjTAygYptHKjJdfTpWzFDICzmhLfIg==
-  dependencies:
-    random-item "*"
-
 aggregate-error@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/aggregate-error/-/aggregate-error-3.0.1.tgz#db2fe7246e536f40d9b5442a39e117d7dd6a24e0"
@@ -2676,11 +2669,6 @@ quick-lru@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-1.1.0.tgz#4360b17c61136ad38078397ff11416e186dcfbb8"
   integrity sha1-Q2CxfGETatOAeDl/8RQW4Ybc+7g=
-
-random-item@*, random-item@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/random-item/-/random-item-3.0.0.tgz#a94edca6845de662072e325c29eca8e85ef88ced"
-  integrity sha512-IpO3Jk9/Dt79R7iS/Fn2d2asGXahMNnXLNRsgSmjTTtiS0tZ972BWEEm9uUgm3YAon5YFUt8126FA9wJAjmeZw==
 
 rc@^1.2.8:
   version "1.2.8"
