@@ -54,5 +54,5 @@ const ARCHETYPES = [
   'wisdom',
 ] as const;
 
-export type Archetype = typeof ARCHETYPES[number];
+export type Archetype = typeof ARCHETYPES[number] | 'demi';
 export default ARCHETYPES;

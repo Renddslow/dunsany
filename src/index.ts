@@ -2,16 +2,16 @@ import sower from 'sower';
 
 import pick from './utils/pick';
 import d from './utils/d';
+import make from './utils/make';
 import { createDeity, Deity } from './deity';
-import { createRelationships } from './relationships';
+import { generateDisposition, INVOLVEMENT, REALMS, Disposition } from './dispositions';
 
 // TODO: workshop these. I like them conceptually, especially for competing
 // pantheons, but need to think through implications/balance
-const dispositions = ['malevolent', 'dismissive', 'needy', 'caring'] as const;
 const ages = ['ancient', 'new', 'old', 'original', 'young'] as const;
 
 interface Pantheon {
-  disposition: typeof dispositions[number];
+  dispositions: Array<Disposition>;
   age: typeof ages[number];
   chief?: string; // deity.id
   deities: Array<Deity>;
@@ -19,27 +19,41 @@ interface Pantheon {
 }
 
 const createPantheon = (seed: string = sower.silly()): Pantheon => {
-  const pantheonSize = d(50, seed); // This is a nice round number just under the number of archetypes
+  const dispositions = make(3).map((_, idx) => generateDisposition(seed + (idx * 4.28).toString()));
 
-  const deities = Array(pantheonSize)
-    .fill(null)
-    .reduce((acc, _, idx) => {
-      const currentArchs = acc.map(({ archetype }) => archetype);
-      acc.push(createDeity(seed + (idx * 3.14).toString(), currentArchs));
-      return acc;
-    }, []);
+  const chief = createDeity(seed + 'chief', dispositions, []);
+  const sideBoard = make(10, seed).reduce((acc, _, idx) => {
+    const currentArchs = [chief.archetype, ...acc.map(({ archetype }) => archetype)];
+    acc.push(createDeity(seed + (idx * 3.14).toString() + 'sideboard', dispositions, currentArchs));
+    return acc;
+  }, []);
 
-  const chief: Deity = pick(deities, seed);
+  const shouldBeMatriarch = chief.gender === 'female' && d(50, seed) === 50;
+  const selfReproducing = shouldBeMatriarch || chief.gender === 'hermaphrodite';
+  const spouse = selfReproducing
+    ? { id: chief.id }
+    : createDeity(seed + 'spouse', dispositions, []);
 
-  createRelationships(deities, seed);
+  const consorts = [
+    { first: chief.id, second: spouse.id },
+    ...make(8, seed + 'chief-consorts').map(() => ({ first: chief.id, second: 'anon' })),
+    ...(selfReproducing
+      ? []
+      : make(8, seed + 'spouse-consorts').map(() => ({ first: spouse.id, second: 'anon' }))),
+  ];
+
+  console.log('CHIEF', chief);
+  console.log('SPOUSE', spouse);
+  console.log('CONSORTS', consorts);
+  console.log(seed);
 
   return {
-    deities,
-    chief: deities.length > 2 ? chief.id : null, // @ts-ignore
+    deities: [],
+    chief: chief.id,
     age: pick(ages, seed),
-    disposition: pick(dispositions, seed),
+    dispositions,
     seed,
   };
 };
 
-console.log(createPantheon());
+createPantheon();

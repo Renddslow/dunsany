@@ -5,8 +5,9 @@ import { RelationshipTypes } from './relationships';
 import generateName from './lib/generateName';
 import d from './utils/d';
 import pick from './utils/pick';
+import { Disposition, getRandomAdjacentDisposition } from './dispositions';
 
-const genders = ['male', 'female', 'hermaphrodite', 'none'] as const;
+const genders = ['male', 'female', 'hermaphrodite'] as const;
 
 export interface Deity {
   name: string;
@@ -20,6 +21,7 @@ export interface Deity {
     dead: boolean;
     // TODO: add more characteristics. Things like jovialness (?), drunkeness, etc.
   };
+  disposition: Disposition;
 }
 
 export interface Relationship {
@@ -31,7 +33,11 @@ export interface Relationship {
   deityId: string;
 }
 
-export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): Deity => {
+export const createDeity = (
+  seed: string,
+  dispositions: Array<Disposition>,
+  currentArchetypes: Array<Archetype>,
+): Deity => {
   const canHaveRival = d(30, seed) === 30;
   const availableArchetypes = canHaveRival
     ? archetypes
@@ -49,5 +55,6 @@ export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): 
       reliability: Math.random(),
       dead: d(100, seed) === 100,
     },
+    disposition: getRandomAdjacentDisposition(seed, dispositions),
   };
 };
