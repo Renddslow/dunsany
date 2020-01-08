@@ -4,7 +4,7 @@ import pick from './utils/pick';
 import d from './utils/d';
 import make from './utils/make';
 import { createDeity, Deity } from './deity';
-import { generateDisposition, INVOLVEMENT, REALMS, Disposition } from './dispositions';
+import { generateDisposition, Disposition } from './dispositions';
 
 // TODO: workshop these. I like them conceptually, especially for competing
 // pantheons, but need to think through implications/balance

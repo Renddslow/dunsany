@@ -26,12 +26,23 @@ export interface Deity {
 
 export interface Relationship {
   type: RelationshipTypes;
+  consort: boolean;
   eris: number; // 0-1
   eros: number; // 0-1
   philo: number; // 0-1
   agape: number; // 0-1
   deityId: string;
 }
+
+const getGender = (seed) => {
+  const genderRoll = d(100, seed);
+
+  if (genderRoll > 98) {
+    return 'hermaphrodite';
+  }
+
+  return genderRoll % 2 ? 'male' : 'female';
+};
 
 export const createDeity = (
   seed: string,
@@ -46,7 +57,7 @@ export const createDeity = (
 
   return {
     name: generateName(seed),
-    gender: pick(genders, seed),
+    gender: getGender(seed),
     archetype,
     relationships: [],
     id: cuid(),
