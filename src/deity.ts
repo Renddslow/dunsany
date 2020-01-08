@@ -33,25 +33,25 @@ export interface Relationship {
 
 export const createDeity = (seed: string, currentArchetypes: Array<Archetype>): Deity => {
   // TODO: seed
-  const canHaveRival = d(30) === 30;
+  const canHaveRival = d(30, seed) === 30;
   const availableArchetypes = canHaveRival
     ? archetypes
     : archetypes.filter((a) => !currentArchetypes.includes(a));
-  const archetype = availableArchetypes[d(availableArchetypes.length) - 1];
+  const archetype = availableArchetypes[d(availableArchetypes.length, seed) - 1];
 
   // TODO: create backstory
 
   return {
-    name: generateName(),
-    gender: genders[d(4) - 1],
+    name: generateName(seed),
+    gender: genders[d(4, seed) - 1],
     archetype,
     relationships: [],
     id: cuid(),
     backstory: '',
     characteristics: {
-      real: d(50) !== 50,
+      real: d(50, seed) !== 50,
       reliability: Math.random(),
-      dead: d(100) === 100,
+      dead: d(100, seed) === 100,
     },
   };
 };

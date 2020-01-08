@@ -1,20 +1,42 @@
+import random from 'random-item';
+
 import d from './utils/d';
-import { createDeity } from './deity';
+import { createDeity, Deity } from './deity';
 
-const createPantheon = (seed: string) => {
-  const pantheonSize = d(50); // This is a nice round number just under the number of archetypes
+// TODO: workshop these. I like them conceptually, especially for competing
+// pantheons, but need to think through implications/balance
+const dispositions = ['malevolent', 'dismissive', 'needy', 'caring'] as const;
+const ages = ['ancient', 'new', 'old', 'original', 'young'] as const;
 
-  const pantheon = Array(pantheonSize)
+interface Pantheon {
+  disposition: typeof dispositions[number];
+  age: typeof ages[number];
+  chief?: string; // deity.id
+  deities: Array<Deity>;
+  seed: string;
+}
+
+const createPantheon = (seed: string): Pantheon => {
+  const pantheonSize = d(50, seed); // This is a nice round number just under the number of archetypes
+
+  const deities = Array(pantheonSize)
     .fill(null)
-    .reduce((acc) => {
+    .reduce((acc, _, idx) => {
       const currentArchs = acc.map(({ archetype }) => archetype);
-      acc.push(createDeity(seed, currentArchs));
+      acc.push(createDeity(seed + (idx * 3.14).toString(), currentArchs));
       return acc;
     }, []);
 
-  console.log(pantheon);
+  const chief: Deity = random(deities);
 
   // TODO: create relationships between deities
+  return {
+    deities,
+    chief: deities.length > 2 ? chief.id : null, // @ts-ignore
+    age: ages[d(ages.length, seed) - 1],
+    disposition: dispositions[d(dispositions.length, seed) - 1],
+    seed,
+  };
 };
 
-createPantheon('');
+console.log(createPantheon('cowboy-chicken-chainsaw'));
