@@ -23,11 +23,11 @@ const decimal = (seed) => (d(100, seed) - 1) / 100;
 export const createSideboardRelationship = (chiefId: string, seed: string) => (
   deity: Deity,
 ): Deity => {
-  const isRelated = d(3, seed + 'related') === 1;
+  const isRelated = d(4, seed + 'related' + deity.id) === 1;
 
   if (!isRelated) return deity;
 
-  const isSibling = d(2, seed + 'sibling') === 1;
+  const isSibling = d(2, seed + 'sibling' + deity.id) === 1;
 
   let type;
   if (isSibling) {
@@ -43,10 +43,10 @@ export const createSideboardRelationship = (chiefId: string, seed: string) => (
         deityId: chiefId,
         type,
         consort: false,
-        eris: decimal(seed + 'eris'),
-        eros: decimal(seed + 'eros'),
-        philo: decimal(seed + 'philo'),
-        agape: decimal(seed + 'agape'),
+        eris: decimal(seed + 'eris' + deity.id),
+        eros: decimal(seed + 'eros' + deity.id),
+        philo: decimal(seed + 'philo' + deity.id),
+        agape: decimal(seed + 'agape' + deity.id),
       },
     ],
   };
