@@ -138,7 +138,10 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
       return acc;
     }, []);
 
-  console.log(JSON.stringify(secondGeneration, null, 2));
+  // TODO: step 9. create consorts for all non-demigods from gen-2 against
+  // all non-demigods in the pantheon.
+
+  // TODO: step 10. make babies
 
   return {
     deities,
