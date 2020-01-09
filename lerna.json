@@ -1,0 +1,12 @@
+{
+  "lerna": "2.9.0",
+  "npmClient": "yarn",
+  "useWorkspaces": true,
+  "version": "independent",
+  "command": {
+    "publish": {
+      "allowBranch": ["master", "develop", "feature/*"],
+      "message": "publishing package(s) to npm [ci skip]"
+    }
+  }
+}

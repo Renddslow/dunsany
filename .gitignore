@@ -1,4 +1,4 @@
-/node_modules
+node_modules/
 yarn-error.log*
 dist/
-compiled
+lerna-debug.log
