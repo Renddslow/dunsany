@@ -4507,6 +4507,11 @@ make-fetch-happen@^5.0.0:
     socks-proxy-agent "^4.0.0"
     ssri "^6.0.0"
 
+mannish@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/mannish/-/mannish-4.0.1.tgz#5c54f35f842815ab3b9c6419bd8b2fa043f735f1"
+  integrity sha512-4yJHJ7gmuJ41GOMhK2KbV1wyZp/laXs2WzqTWI/xZHtzdTQFNqvaMNbwaLfNjW/6muWmzFf9k55JvSpvvfPEZg==
+
 map-cache@^0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/map-cache/-/map-cache-0.2.2.tgz#c32abd0bd6525d9b051645bb4f26ac5dc98a0dbf"

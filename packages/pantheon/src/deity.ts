@@ -34,8 +34,8 @@ export interface Relationship {
   deityId: string;
 }
 
-const getGender = (seed) => {
-  const genderRoll = d(100, seed);
+const getGender = () => {
+  const genderRoll = d(100);
 
   if (genderRoll > 98) {
     return 'hermaphrodite';
@@ -45,27 +45,26 @@ const getGender = (seed) => {
 };
 
 export const createDeity = (
-  seed: string,
   dispositions: Array<Disposition>,
   currentArchetypes: Array<Archetype>,
 ): Deity => {
-  const canHaveRival = d(30, seed) === 30;
+  const canHaveRival = d(30) === 30;
   const availableArchetypes = canHaveRival
     ? archetypes
     : archetypes.filter((a) => !currentArchetypes.includes(a));
-  const archetype = pick(availableArchetypes, seed);
+  const archetype = pick(availableArchetypes);
 
   return {
-    name: generateName(seed),
-    gender: getGender(seed),
+    name: generateName(),
+    gender: getGender(),
     archetype,
     relationships: [],
     id: cuid(),
     characteristics: {
-      real: d(50, seed) !== 50,
+      real: d(50) !== 50,
       reliability: Math.random(),
-      dead: d(100, seed) === 100,
+      dead: d(100) === 100,
     },
-    disposition: getRandomAdjacentDisposition(seed, dispositions),
+    disposition: getRandomAdjacentDisposition(dispositions),
   };
 };

@@ -1,6 +1,6 @@
-import seedrandom from 'seedrandom';
+import mediator from './mediator';
 
-export default (arr, seed) => {
+export default (arr) => {
   if (!Array.isArray(arr)) throw new Error('Expected array');
-  return arr[Math.floor(seedrandom(seed)() * arr.length)];
+  return arr[Math.floor(mediator.call('random') * arr.length)];
 };

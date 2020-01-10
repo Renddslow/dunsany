@@ -1,8 +1,11 @@
 import sower from 'sower';
+import seedrandom from 'seedrandom';
 
 import pick from './utils/pick';
 import d from './utils/d';
 import make from './utils/make';
+import mediator from './utils/mediator';
+
 import { createDeity, Deity } from './deity';
 import { generateDisposition, Disposition } from './dispositions';
 import {
@@ -26,24 +29,25 @@ interface Pantheon {
 }
 
 const createPantheon = (seed: string = sower.silly()): Pantheon => {
+  // seed our random number generator
+  mediator.provide('random', seedrandom(seed));
+
   const deities = [];
-  const dispositions = make(3).map((_, idx) => generateDisposition(seed + (idx * 4.28).toString()));
+  const dispositions = make(3).map((_, idx) => generateDisposition());
 
   // Step 1: Create a chief deity
-  const chief = createDeity(seed + 'chief', dispositions, []);
+  const chief = createDeity(dispositions, []);
 
   // Step 2: Create a "sideboard" of deities. These are
   // potential suitors for the second generation and potential
   // relatives of the chief, children of titans and eldritch horrors.
-  const sideBoard = make(10, seed)
+  const sideBoard = make(10)
     .reduce((acc, _, idx) => {
       const currentArchs = [chief.archetype, ...acc.map(({ archetype }) => archetype)];
-      acc.push(
-        createDeity(seed + (idx * 3.14).toString() + 'sideboard', dispositions, currentArchs),
-      );
+      acc.push(createDeity(dispositions, currentArchs));
       return acc;
     }, [])
-    .map(createSideboardRelationship(chief.id, seed)); // Step 3: Create relationships between chief and sideboards
+    .map(createSideboardRelationship(chief.id)); // Step 3: Create relationships between chief and sideboards
 
   // Step 4. Assign created relationships back to the chief
   chief.relationships = sideBoard.reduce((acc, { id, relationships }) => {
@@ -63,27 +67,17 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
   // if the chief is a hermaphrodite, he will also be selfReproducing.
   // Based on this, a spouse will either be created or the chief assigned
   // as spouse.
-  const shouldBeMatriarch = chief.gender === 'female' && d(50, seed) === 50;
+  const shouldBeMatriarch = chief.gender === 'female' && d(50) === 50;
   const selfReproducing = shouldBeMatriarch || chief.gender === 'hermaphrodite';
   const spouse = selfReproducing
     ? { id: chief.id, gender: chief.gender, relationships: [] }
-    : createDeity(seed + 'spouse', dispositions, []);
+    : createDeity(dispositions, []);
 
   spouse.relationships.push(
-    createRelationship(
-      spouse.gender !== 'female' ? 'husband' : 'wife',
-      chief.id,
-      true,
-      seed + 'spouse',
-    ),
+    createRelationship(spouse.gender !== 'female' ? 'husband' : 'wife', chief.id, true),
   );
   chief.relationships.push(
-    createRelationship(
-      chief.gender !== 'female' ? 'husband' : 'wife',
-      spouse.id,
-      true,
-      seed + 'spouse',
-    ),
+    createRelationship(chief.gender !== 'female' ? 'husband' : 'wife', spouse.id, true),
   );
 
   // Step 6. Put the first generation into the pantheon. This will simplify
@@ -101,14 +95,14 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
       secondGender: spouse.gender,
       guarantee: 3,
     },
-    ...make(8, seed + 'chief-consorts').map(() => ({
+    ...make(8).map(() => ({
       first: chief.id,
       firstGender: chief.gender,
       second: 'anon',
     })),
     ...(selfReproducing
       ? []
-      : make(8, seed + 'spouse-consorts').map(() => ({
+      : make(8).map(() => ({
           first: spouse.id,
           firstGender: chief.gender,
           second: 'anon',
@@ -119,7 +113,6 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
   const secondGeneration = consorts
     .map(
       reproduce(
-        seed,
         dispositions,
         deities.map(({ archetype }) => archetype),
       ),
@@ -143,14 +136,18 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
 
   // TODO: step 10. make babies
 
-  return {
+  const result = {
     deities,
     chief: chief.id,
     chiefSpouse: !selfReproducing && spouse.id,
-    age: pick(ages, seed),
+    age: pick(ages),
     dispositions,
     seed,
   };
+
+  console.log(result);
+
+  return result;
 };
 
-createPantheon();
+createPantheon('trevor');

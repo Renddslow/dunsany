@@ -5,31 +5,21 @@ import { Archetype } from './archetypes';
 import d from './utils/d';
 import { createRelationship } from './relationships';
 
-const createParentalRelationships = (seed, deity, first, second) => {
+const createParentalRelationships = (deity, first, second) => {
   const firstRelationship = createRelationship(
     deity.gender !== 'female' ? 'son' : 'daughter',
     first,
     false,
-    seed + first + deity.id,
   );
   return first === second || second === 'anon'
     ? [firstRelationship]
     : [
         firstRelationship,
-        createRelationship(
-          deity.gender !== 'female' ? 'son' : 'daughter',
-          second,
-          false,
-          seed + second + deity.id,
-        ),
+        createRelationship(deity.gender !== 'female' ? 'son' : 'daughter', second, false),
       ];
 };
 
-export const reproduce = (
-  seed: string,
-  dispositions: Array<Disposition>,
-  archetypes: Array<Archetype>,
-) => ({
+export const reproduce = (dispositions: Array<Disposition>, archetypes: Array<Archetype>) => ({
   first,
   firstGender,
   second,
@@ -41,32 +31,21 @@ export const reproduce = (
     [second]: [],
   };
 
-  const sower = (num) => seed + first + second + num.toString();
-  const produceDeity = (s) => {
-    const deity = createDeity(s, dispositions, archetypes);
+  const produceDeity = () => {
+    const deity = createDeity(dispositions, archetypes);
 
     if (second === 'anon') {
       deity.archetype = 'demi';
     }
 
-    deity.relationships = createParentalRelationships(seed, deity, first, second);
+    deity.relationships = createParentalRelationships(deity, first, second);
     parentalRelationships[first].push(
-      createRelationship(
-        firstGender !== 'female' ? 'father' : 'mother',
-        deity.id,
-        false,
-        seed + first + deity.id,
-      ),
+      createRelationship(firstGender !== 'female' ? 'father' : 'mother', deity.id, false),
     );
 
     if (secondGender) {
       parentalRelationships[second].push(
-        createRelationship(
-          secondGender !== 'female' ? 'father' : 'mother',
-          deity.id,
-          false,
-          seed + second + deity.id,
-        ),
+        createRelationship(secondGender !== 'female' ? 'father' : 'mother', deity.id, false),
       );
     }
 
@@ -76,19 +55,17 @@ export const reproduce = (
   const children = [];
 
   if (guarantee) {
-    children.push(
-      ...make(guarantee).map((_, idx) => produceDeity(sower(idx * new Date().getTime()))),
-    );
+    children.push(...make(guarantee).map((_, idx) => produceDeity()));
   }
 
   let chance = 3 + children.length;
 
   while (true) {
-    const canHaveKids = d(chance, sower(new Date().getTime() + 'can-have-kids')) === 3;
+    const canHaveKids = d(chance) === 3;
 
     if (!canHaveKids) break;
 
-    const deity = produceDeity(sower(children.length * new Date().getTime()));
+    const deity = produceDeity();
     children.push(deity);
 
     chance += 1;

@@ -18,26 +18,24 @@ const RELATIONSHIP_TYPES = [
 
 export type RelationshipTypes = typeof RELATIONSHIP_TYPES[number];
 
-const decimal = (seed) => (d(100, seed) - 1) / 100;
+const decimal = () => (d(100) - 1) / 100;
 
-export const createRelationship = (type, deityId, consort, seed) => ({
+export const createRelationship = (type, deityId, consort) => ({
   deityId,
   type,
   consort,
-  eris: decimal(seed + 'eris'),
-  eros: decimal(seed + 'eros'),
-  philo: decimal(seed + 'philo'),
-  agape: decimal(seed + 'agape'),
+  eris: decimal(),
+  eros: decimal(),
+  philo: decimal(),
+  agape: decimal(),
 });
 
-export const createSideboardRelationship = (chiefId: string, seed: string) => (
-  deity: Deity,
-): Deity => {
-  const isRelated = d(4, seed + 'related' + deity.id) === 1;
+export const createSideboardRelationship = (chiefId: string) => (deity: Deity): Deity => {
+  const isRelated = d(4) === 1;
 
   if (!isRelated) return deity;
 
-  const isSibling = d(2, seed + 'sibling' + deity.id) === 1;
+  const isSibling = d(2) === 1;
 
   let type;
   if (isSibling) {
@@ -48,7 +46,7 @@ export const createSideboardRelationship = (chiefId: string, seed: string) => (
 
   return {
     ...deity,
-    relationships: [createRelationship(type, chiefId, false, seed + deity.id)],
+    relationships: [createRelationship(type, chiefId, false)],
   };
 };
 

@@ -1,4 +1,3 @@
-import seedrandom from 'seedrandom';
+import mediator from './mediator';
 
-export default (d: number, seed: string): number =>
-  Math.ceil(seedrandom(seed.padEnd(d, seed))() * d);
+export default (d: number): number => Math.ceil(mediator.call('random') * d);
