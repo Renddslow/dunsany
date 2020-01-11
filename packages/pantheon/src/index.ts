@@ -8,11 +8,6 @@ import mediator from './utils/mediator';
 
 import { createDeity, Deity } from './deity';
 import { generateDisposition, Disposition } from './dispositions';
-import {
-  createRelationship,
-  createSideboardRelationship,
-  invertRelationship,
-} from './relationships';
 import { reproduce } from './reproduce';
 
 // TODO: workshop these. I like them conceptually, especially for competing
@@ -33,38 +28,38 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
   mediator.provide('random', seedrandom(seed));
 
   const deities = [];
-  const dispositions = make(3).map((_, idx) => generateDisposition());
+  const dispositions = make(3).map(() => generateDisposition());
+  const relationships = [];
 
   // Step 1: Create a chief deity
   const chief = createDeity(dispositions, []);
+  relationships.push({
+    first: 'anon-chronos',
+    second: chief.id,
+    action: 'beget',
+  });
 
   // Step 2: Create a "sideboard" of deities. These are
   // potential suitors for the second generation and potential
   // relatives of the chief, children of titans and eldritch horrors.
-  const sideBoard = make(10)
-    .reduce((acc, _, idx) => {
-      const currentArchs = [chief.archetype, ...acc.map(({ archetype }) => archetype)];
-      acc.push(createDeity(dispositions, currentArchs));
-      return acc;
-    }, [])
-    .map(createSideboardRelationship(chief.id)); // Step 3: Create relationships between chief and sideboards
+  const sideBoard = make(10).reduce((acc, _, idx) => {
+    const currentArchs = [chief.archetype, ...acc.map(({ archetype }) => archetype)];
+    const deity = createDeity(dispositions, currentArchs);
 
-  // Step 4. Assign created relationships back to the chief
-  chief.relationships = sideBoard.reduce((acc, { id, relationships }) => {
-    if (relationships.length) {
-      acc.push(
-        ...relationships.map((r) => {
-          const rel = invertRelationship(r, chief);
-          rel.deityId = id;
-          return rel;
-        }),
-      );
+    if (d(10) === 8) {
+      relationships.push({
+        first: d(2) === 1 ? 'anon-chronos' : 'anon-uranus',
+        second: deity.id,
+        action: 'beget',
+      });
     }
+
+    acc.push(deity);
     return acc;
   }, []);
 
-  // Step 5. Determine if the chief should be matriarchal and self-procreating
-  // if the chief is a hermaphrodite, he will also be selfReproducing.
+  // Step 3. Determine if the chief should be matriarchal and self-procreating
+  // If the chief is a hermaphrodite, he will also be selfReproducing.
   // Based on this, a spouse will either be created or the chief assigned
   // as spouse.
   const shouldBeMatriarch = chief.gender === 'female' && d(50) === 50;
@@ -73,43 +68,38 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     ? { id: chief.id, gender: chief.gender, relationships: [] }
     : createDeity(dispositions, []);
 
-  spouse.relationships.push(
-    createRelationship(spouse.gender !== 'female' ? 'husband' : 'wife', chief.id, true),
-  );
-  chief.relationships.push(
-    createRelationship(chief.gender !== 'female' ? 'husband' : 'wife', spouse.id, true),
-  );
+  deities.push(...[chief, spouse, ...sideBoard]);
 
-  // Step 6. Put the first generation into the pantheon. This will simplify
-  // looking them up for changes to relationships.
-  deities.push(chief, spouse, ...sideBoard);
-
-  // Step 7. Generate consort relationships. These are randomly created, with the chief
+  // Step 4. Generate consort relationships. These are randomly created, with the chief
   // and chief's spouse being guaranteed. Anon are mortal (or animal) consorts
   // that will produce demigods.
   const consorts = [
     {
       first: chief.id,
-      firstGender: chief.gender,
       second: spouse.id,
-      secondGender: spouse.gender,
       guarantee: 3,
     },
     ...make(8).map(() => ({
       first: chief.id,
-      firstGender: chief.gender,
       second: 'anon',
     })),
     ...(selfReproducing
       ? []
       : make(8).map(() => ({
           first: spouse.id,
-          firstGender: chief.gender,
           second: 'anon',
         }))),
   ];
 
-  // Step 8. Make babies
+  const unpackGeneration = (acc, { relationships: generatedRelationships, children }) => {
+    if (!children.length) return acc;
+
+    relationships.push(...generatedRelationships);
+    acc.push(...children);
+    return acc;
+  };
+
+  // Step 5. Make babies
   const secondGeneration = consorts
     .map(
       reproduce(
@@ -117,22 +107,52 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
         deities.map(({ archetype }) => archetype),
       ),
     )
-    .reduce((acc, { parentalRelationships, children }) => {
-      if (!children.length) return acc;
+    .reduce(unpackGeneration, []);
+  deities.push(...secondGeneration);
 
-      Object.keys(parentalRelationships)
-        .filter((k) => k !== 'anon')
-        .forEach((k) => {
-          const idx = deities.findIndex(({ id }) => id === k);
-          deities[idx].relationships.push(...parentalRelationships[k]);
-        });
+  const availableConsorts = deities.filter((d) => {
+    const hasTwoParents = relationships.filter(({ second }) => second === d.id);
 
-      acc.push(...children);
-      return acc;
-    }, []);
+    return hasTwoParents.length === 2;
+  });
 
-  // TODO: step 9. create consorts for all non-demigods from gen-2 against
+  // step 6. create consorts for all non-demigods from gen-2 against
   // all non-demigods in the pantheon.
+  const secondGenConsorts = secondGeneration.reduce((acc, deity) => {
+    if (d(2) !== 1) return acc;
+
+    availableConsorts.forEach((potentialSuitor) => {
+      if (potentialSuitor.id === deity.id) return;
+
+      if (d(3) === 1) {
+        acc.push({
+          first: deity.id,
+          second: potentialSuitor.id,
+          guarantee: d(2),
+        });
+      }
+    });
+
+    acc.push(
+      ...make(d(6)).map(() => ({
+        first: deity.id,
+        second: 'anon',
+      })),
+    );
+
+    return acc;
+  }, []);
+
+  deities.push(
+    ...secondGenConsorts
+      .map(
+        reproduce(
+          dispositions,
+          deities.map(({ archetype }) => archetype),
+        ),
+      )
+      .reduce(unpackGeneration, []),
+  );
 
   // TODO: step 10. make babies
 
@@ -143,6 +163,7 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     age: pick(ages),
     dispositions,
     seed,
+    relationships,
   };
 
   console.log(result);
@@ -150,4 +171,7 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
   return result;
 };
 
-createPantheon('trevor');
+// TODO: remove this call;
+createPantheon(process.argv.slice(2)[0]);
+
+export default createPantheon;

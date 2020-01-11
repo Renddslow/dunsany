@@ -1,35 +1,15 @@
 import make from './utils/make';
-import { createDeity, Relationship } from './deity';
+import { createDeity, Deity } from './deity';
 import { Disposition } from './dispositions';
 import { Archetype } from './archetypes';
 import d from './utils/d';
-import { createRelationship } from './relationships';
-
-const createParentalRelationships = (deity, first, second) => {
-  const firstRelationship = createRelationship(
-    deity.gender !== 'female' ? 'son' : 'daughter',
-    first,
-    false,
-  );
-  return first === second || second === 'anon'
-    ? [firstRelationship]
-    : [
-        firstRelationship,
-        createRelationship(deity.gender !== 'female' ? 'son' : 'daughter', second, false),
-      ];
-};
 
 export const reproduce = (dispositions: Array<Disposition>, archetypes: Array<Archetype>) => ({
   first,
-  firstGender,
   second,
-  secondGender,
   guarantee,
-}): { children: Array<Relationship>; parentalRelationships: any } => {
-  const parentalRelationships = {
-    [first]: [],
-    [second]: [],
-  };
+}): { children: Array<Deity>; relationships: any } => {
+  const relationships = [];
 
   const produceDeity = () => {
     const deity = createDeity(dispositions, archetypes);
@@ -38,15 +18,18 @@ export const reproduce = (dispositions: Array<Disposition>, archetypes: Array<Ar
       deity.archetype = 'demi';
     }
 
-    deity.relationships = createParentalRelationships(deity, first, second);
-    parentalRelationships[first].push(
-      createRelationship(firstGender !== 'female' ? 'father' : 'mother', deity.id, false),
-    );
+    relationships.push({
+      first,
+      second: deity.id,
+      action: 'beget',
+    });
 
-    if (secondGender) {
-      parentalRelationships[second].push(
-        createRelationship(secondGender !== 'female' ? 'father' : 'mother', deity.id, false),
-      );
+    if (second !== 'anon') {
+      relationships.push({
+        first: second,
+        second: deity.id,
+        action: 'beget',
+      });
     }
 
     return deity;
@@ -72,7 +55,7 @@ export const reproduce = (dispositions: Array<Disposition>, archetypes: Array<Ar
   }
 
   return {
-    parentalRelationships,
+    relationships,
     children,
   };
 };

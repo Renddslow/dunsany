@@ -1,7 +1,6 @@
 import cuid from 'cuid';
 
 import archetypes, { Archetype } from './archetypes';
-import { RelationshipTypes } from './relationships';
 import generateName from './lib/generateName';
 import d from './utils/d';
 import pick from './utils/pick';
@@ -12,7 +11,6 @@ const genders = ['male', 'female', 'hermaphrodite'] as const;
 export interface Deity {
   name: string;
   archetype: Archetype;
-  relationships?: Array<Relationship>;
   id: string;
   gender: typeof genders[number];
   characteristics: {
@@ -22,16 +20,6 @@ export interface Deity {
     // TODO: add more characteristics. Things like jovialness (?), drunkeness, etc.
   };
   disposition: Disposition;
-}
-
-export interface Relationship {
-  type: RelationshipTypes;
-  consort: boolean;
-  eris: number; // 0-1
-  eros: number; // 0-1
-  philo: number; // 0-1
-  agape: number; // 0-1
-  deityId: string;
 }
 
 const getGender = () => {
@@ -58,8 +46,7 @@ export const createDeity = (
     name: generateName(),
     gender: getGender(),
     archetype,
-    relationships: [],
-    id: cuid(),
+    id: cuid(), // TODO: instead of CUID's create something repeatable
     characteristics: {
       real: d(50) !== 50,
       reliability: Math.random(),
