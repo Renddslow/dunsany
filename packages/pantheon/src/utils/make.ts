@@ -1,3 +1,4 @@
 import d from './d';
 
-export default (number: number) => Array(d(number)).fill(null);
+export default (number: number, random: boolean = false) =>
+  random ? Array(d(number)).fill(null) : Array(number).fill(null);

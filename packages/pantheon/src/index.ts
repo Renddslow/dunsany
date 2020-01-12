@@ -42,7 +42,7 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
   // Step 2: Create a "sideboard" of deities. These are
   // potential suitors for the second generation and potential
   // relatives of the chief, children of titans and eldritch horrors.
-  const sideBoard = make(10).reduce((acc, _, idx) => {
+  const sideBoard = make(10, true).reduce((acc, _, idx) => {
     const currentArchs = [chief.archetype, ...acc.map(({ archetype }) => archetype)];
     const deity = createDeity(dispositions, currentArchs);
 
@@ -79,13 +79,13 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
       second: spouse.id,
       guarantee: 3,
     },
-    ...make(8).map(() => ({
+    ...make(8, true).map(() => ({
       first: chief.id,
       second: 'anon',
     })),
     ...(selfReproducing
       ? []
-      : make(8).map(() => ({
+      : make(8, true).map(() => ({
           first: spouse.id,
           second: 'anon',
         }))),
@@ -134,7 +134,7 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     });
 
     acc.push(
-      ...make(d(6)).map(() => ({
+      ...make(d(6), true).map(() => ({
         first: deity.id,
         second: 'anon',
       })),
