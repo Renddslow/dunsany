@@ -139,7 +139,7 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     });
 
     acc.push(
-      ...make(d(6), true).map(() => ({
+      ...make(6, true).map(() => ({
         first: deity.id,
         second: 'anon',
       })),
