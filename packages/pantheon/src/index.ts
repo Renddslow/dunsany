@@ -110,11 +110,9 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     .reduce(unpackGeneration, []);
   deities.push(...secondGeneration);
 
-  const availableConsorts = deities.filter((d) => {
-    const hasTwoParents = relationships.filter(({ second }) => second === d.id);
-
-    return hasTwoParents.length === 2;
-  });
+  const availableConsorts = deities.filter(
+    (d) => relationships.filter(({ second }) => second === d.id).length === 2,
+  );
 
   // step 6. create consorts for all non-demigods from gen-2 against
   // all non-demigods in the pantheon.
