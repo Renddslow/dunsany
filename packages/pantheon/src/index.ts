@@ -14,6 +14,12 @@ import { reproduce } from './reproduce';
 // pantheons, but need to think through implications/balance
 const ages = ['ancient', 'new', 'old', 'original', 'young'] as const;
 
+interface RelationshipEvent {
+  first: string; // parent deity.id
+  second: string; // child deity.id
+  action: string; // "beget"
+}
+
 interface Pantheon {
   dispositions: Array<Disposition>;
   age: typeof ages[number];
@@ -21,6 +27,7 @@ interface Pantheon {
   chiefSpouse?: string;
   deities: Array<Deity>;
   seed: string;
+  relationships: Array<RelationshipEvent>;
 }
 
 const createPantheon = (seed: string = sower.silly()): Pantheon => {
@@ -141,20 +148,17 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     return acc;
   }, []);
 
-  deities.push(
-    ...secondGenConsorts
-      .map(
-        reproduce(
-          dispositions,
-          deities.map(({ archetype }) => archetype),
-        ),
-      )
-      .reduce(unpackGeneration, []),
-  );
+  const thirdGeneration = secondGenConsorts
+    .map(
+      reproduce(
+        dispositions,
+        deities.map(({ archetype }) => archetype),
+      ),
+    )
+    .reduce(unpackGeneration, []);
+  deities.push(...thirdGeneration);
 
-  // TODO: step 10. make babies
-
-  const result = {
+  return {
     deities,
     chief: chief.id,
     chiefSpouse: !selfReproducing && spouse.id,
@@ -163,13 +167,10 @@ const createPantheon = (seed: string = sower.silly()): Pantheon => {
     seed,
     relationships,
   };
-
-  console.log(result);
-
-  return result;
 };
 
-// TODO: remove this call;
-createPantheon(process.argv.slice(2)[0]);
+if (process.env.DEBUG) {
+  console.log(createPantheon(process.argv.slice(2)[0]));
+}
 
 export default createPantheon;
