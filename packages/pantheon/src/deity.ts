@@ -1,7 +1,6 @@
 import cuid from 'cuid';
 
 import archetypes, { Archetype } from './archetypes';
-import { RelationshipTypes } from './relationships';
 import generateName from './lib/generateName';
 import d from './utils/d';
 import pick from './utils/pick';
@@ -12,7 +11,6 @@ const genders = ['male', 'female', 'hermaphrodite'] as const;
 export interface Deity {
   name: string;
   archetype: Archetype;
-  relationships?: Array<Relationship>;
   id: string;
   gender: typeof genders[number];
   characteristics: {
@@ -24,37 +22,36 @@ export interface Deity {
   disposition: Disposition;
 }
 
-export interface Relationship {
-  type: RelationshipTypes;
-  eris: number; // 0-1
-  eros: number; // 0-1
-  philo: number; // 0-1
-  agape: number; // 0-1
-  deityId: string;
-}
+const getGender = () => {
+  const genderRoll = d(100);
+
+  if (genderRoll > 98) {
+    return 'hermaphrodite';
+  }
+
+  return genderRoll % 2 ? 'male' : 'female';
+};
 
 export const createDeity = (
-  seed: string,
   dispositions: Array<Disposition>,
   currentArchetypes: Array<Archetype>,
 ): Deity => {
-  const canHaveRival = d(30, seed) === 30;
+  const canHaveRival = d(30) === 30;
   const availableArchetypes = canHaveRival
     ? archetypes
     : archetypes.filter((a) => !currentArchetypes.includes(a));
-  const archetype = pick(availableArchetypes, seed);
+  const archetype = pick(availableArchetypes);
 
   return {
-    name: generateName(seed),
-    gender: pick(genders, seed),
+    name: generateName(),
+    gender: getGender(),
     archetype,
-    relationships: [],
-    id: cuid(),
+    id: cuid(), // TODO: instead of CUID's create something repeatable
     characteristics: {
-      real: d(50, seed) !== 50,
+      real: d(50) !== 50,
       reliability: Math.random(),
-      dead: d(100, seed) === 100,
+      dead: d(100) === 100,
     },
-    disposition: getRandomAdjacentDisposition(seed, dispositions),
+    disposition: getRandomAdjacentDisposition(dispositions),
   };
 };

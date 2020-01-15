@@ -1,0 +1,55 @@
+{
+  "devDependencies": {
+    "@dmsi/prettier-config": "^1.3.0",
+    "@types/cuid": "^1.3.0",
+    "@types/node": "^10.16.0",
+    "ava": "^2.4.0",
+    "del-cli": "^3.0.0",
+    "husky": "^4.0.0",
+    "lint-staged": "^9.5.0",
+    "prettier": "^1.19.1",
+    "ts-node": "^8.5.4",
+    "typescript": "^3.7.4"
+  },
+  "files": [
+    "dist"
+  ],
+  "name": "@dunsany/pantheon",
+  "version": "0.0.0",
+  "description": "A procedural pantheon generator.",
+  "repository": "https://github.com/Renddslow/dunsany",
+  "author": "Matt McElwee <mubatt@wyopub.com>",
+  "license": "CC-BY-NC-SA-2.0",
+  "scripts": {
+    "prebuild": "del-cli dist",
+    "start": "node dist/index.js",
+    "build": "tsc",
+    "test": "ava",
+    "declare": "tsc -d"
+  },
+  "types": "dist",
+  "dependencies": {
+    "clone-deep": "^4.0.1",
+    "cuid": "^2.1.8",
+    "mannish": "^4.0.1",
+    "seedrandom": "^3.0.5",
+    "sower": "^0.1.0",
+    "titleize": "^2.1.0"
+  },
+  "main": "dist/index.js",
+  "ava": {
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "concurrency": 4,
+    "timeout": "1m",
+    "babel": false,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  }
+}

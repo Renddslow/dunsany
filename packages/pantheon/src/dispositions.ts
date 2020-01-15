@@ -12,15 +12,9 @@ export const INVOLVEMENT = [
 
 export type Disposition = [typeof REALMS[number], typeof INVOLVEMENT[number]];
 
-export const generateDisposition = (seed: string): Disposition => [
-  pick(REALMS, seed),
-  pick(INVOLVEMENT, seed),
-];
+export const generateDisposition = (): Disposition => [pick(REALMS), pick(INVOLVEMENT)];
 
-export const getRandomAdjacentDisposition = (
-  seed: string,
-  dispositions: Array<Disposition>,
-): Disposition => {
+export const getRandomAdjacentDisposition = (dispositions: Array<Disposition>): Disposition => {
   const available = dispositions
     .map(([realm, involvement]) => [
       REALMS.findIndex((r) => r === realm),
@@ -39,6 +33,6 @@ export const getRandomAdjacentDisposition = (
       return acc;
     }, []);
 
-  const [realmIdx, involvementIdx] = pick(available, seed);
+  const [realmIdx, involvementIdx] = pick(available);
   return [REALMS[realmIdx], INVOLVEMENT[involvementIdx]];
 };
