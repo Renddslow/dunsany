@@ -100,4 +100,28 @@ At DMSi, we do this with everything from our design system all the way up to our
 
 ## Tasty Treat
 
-So I wanted to spend a few minutes walking through something I am especially proud of. Y'all may have noticed in the screen shot of the Pantheon output that each of the gods have a unique name. So I'm gonna unpack how I did that.
+So I wanted to spend a few minutes walking through something I am especially proud of. Y'all may have noticed in the screen shot of the Pantheon output that each of the gods have a unique name. So I'm gonna unpack how we did that.
+
+First of all, we started with a predefined set of letters. Eventually we'd like to have pantheons whose names sound Greek, or Norse, or Latin, or Mayan, or what have you. For now, we started with a "dataset" of Akkadian deity names. And when I say dataset, I mean we went to some ancient languages wiki and found a list of Akkadian deities and then with our eyeballs, mapped out letter pairings. I also have spent a teeny bit of time on in ancient Hebrew with my educational background, and since Akkadian and Hebrew are both semitic, I also borrowed from what I knew of common letter pairings in Hebrew.
+
+So what we wind up with is this:
+
+[Letter pairings image]
+
+We start by picking a max length of word. Then pick a letter from the approved list as the start of a reducer function. We reduce over a null-filled array of our max-length, and use the previous letter to inform the next level.
+
+Now we made a couple of rules that weren't really based on any linguistic knowledge, but just to aid pronunciation. So we only allow two vowels and two consonants as direct siblings. This prevents having some weird name unpronouncable name.
+
+[Mister Mxyzptlk]
+
+Now this, as far as I can tell, is not native to Akkadian, but aids to the ancient feel and pronouncability of the name: we will potentially add a random apostrophe in the middle of the word. Not at the beginning and not at the very end, and maybe not at all.
+
+Then we decide if the next letter should be a vowel or consonant, and randomly pick what the next letter should be based on the allowed siblings.
+
+[more code]
+
+Now one problem we ran into is that in semitic languages, there are a few phonemes that we don't have in English that we, and by we I mean English, represent as letter pairs when transliterating. The two in particular we, and by we I mean my team, used were the voiceless uvular fricative (chet) and the voiceless alveolar affricate (tsade). We're still working on a good solution for this. Because we're doing a look back to the previous token, it's hard to assign a single letter. For now, we used numbers that just get string replaced before the name is output. If you have a better idea, come up to the DMSi table and let me know, or submit a PR.
+
+[slide showing chet and tsade]
+
+So in the end, what this generates is a name for each deity. Here's a few I generated this morning. (Stumble over pronunciation)
