@@ -20,7 +20,7 @@ interface EdgeWeights {
   agape: number;
 }
 
-interface Edge extends EdgeWeights {
+export interface Edge extends EdgeWeights {
   type: string;
   directed: boolean;
   from: string;
@@ -28,7 +28,13 @@ interface Edge extends EdgeWeights {
   id: string;
 }
 
-interface Graph {
+export interface RelationshipEvent {
+  first: string;
+  second: string;
+  action: string;
+}
+
+export interface Graph {
   addNode(type: string, data: any): void;
   addEdge(from: string, to: string, type: string, weights: EdgeWeights, directed: boolean): void;
   on(event: string, cb: (node: GraphNode, meta: Meta) => void): void;
