@@ -20,13 +20,16 @@ interface EdgeWeights {
   agape: number;
 }
 
-export interface Edge extends EdgeWeights {
+interface EdgeOptions extends EdgeWeights {
   type: string;
   directed: boolean;
   from: string;
   to: string;
-  id: string;
 }
+
+export type Edge = EdgeOptions & {
+  id: string;
+};
 
 export interface RelationshipEvent {
   first: string;
@@ -36,7 +39,7 @@ export interface RelationshipEvent {
 
 export interface Graph {
   addNode(type: string, data: any): void;
-  addEdge(from: string, to: string, type: string, weights: EdgeWeights, directed: boolean): void;
+  addEdge(edge: EdgeOptions): void;
   on(event: string, cb: (node: GraphNode, meta: Meta) => void): void;
   query(query: Query): Edge;
   queryAll(query: Query): Array<Edge>;
@@ -72,19 +75,9 @@ export default (): Graph => {
     call('added', node, meta);
   };
 
-  const addEdge = (
-    from: string,
-    to: string,
-    type: string,
-    weights: EdgeWeights,
-    directed: boolean = true,
-  ) =>
+  const addEdge = (edge: EdgeOptions) =>
     edges.push({
-      from,
-      to,
-      type,
-      directed,
-      ...weights,
+      ...edge,
       id: cuid(),
     });
 
