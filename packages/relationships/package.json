@@ -17,5 +17,23 @@
     "test": "ava",
     "declare": "tsc -d",
     "prepare": "yarn build"
+  },
+  "ava": {
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "concurrency": 4,
+    "timeout": "1m",
+    "babel": false,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "dependencies": {
+    "dot-prop": "^5.2.0"
   }
 }
