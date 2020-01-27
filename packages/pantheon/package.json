@@ -14,7 +14,8 @@
     "start": "node dist/index.js",
     "build": "tsc",
     "test": "ava",
-    "declare": "tsc -d"
+    "declare": "tsc -d",
+    "prepare": "yarn build"
   },
   "types": "dist",
   "dependencies": {
