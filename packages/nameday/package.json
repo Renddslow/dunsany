@@ -14,7 +14,8 @@
   "license": "CC-BY-NC-SA-2.0",
   "repository": "https://github.com/Renddslow/dunsany",
   "scripts": {
-    "test": "echo \"Error: run tests from root\""
+    "build": "tsc",
+    "test": "ava"
   },
   "bugs": {
     "url": "https://github.com/Renddslow/dunsany/issues"
@@ -38,5 +39,9 @@
   "files": [
     "dist"
   ],
-  "types": "dist"
+  "types": "dist",
+  "dependencies": {
+    "deepmerge": "^4.2.2",
+    "uniq": "^1.0.1"
+  }
 }

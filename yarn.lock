@@ -300,19 +300,6 @@
   resolved "https://registry.yarnpkg.com/@dmsi/prettier-config/-/prettier-config-1.3.0.tgz#2139fa26f67f2735ac24eed4631aac9fc84ee9f8"
   integrity sha512-B9ETX26Ys+mBq/sAdZk0SEGQsu3/TNpfHlD7LaKyQRnlzgq6vSlx37njgSdYCcuZx0FhJL6oDk+ZJbhBC/3VQQ==
 
-"@dunsany/nameday@file:packages/nameday":
-  version "0.0.0"
-
-"@dunsany/pantheon@file:packages/pantheon":
-  version "0.0.0"
-  dependencies:
-    clone-deep "^4.0.1"
-    cuid "^2.1.8"
-    mannish "^4.0.1"
-    seedrandom "^3.0.5"
-    sower "^0.1.0"
-    titleize "^2.1.0"
-
 "@evocateur/libnpmaccess@^3.1.2":
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/@evocateur/libnpmaccess/-/libnpmaccess-3.1.2.tgz#ecf7f6ce6b004e9f942b098d92200be4a4b1c845"
@@ -2478,6 +2465,11 @@ deep-extend@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/deep-extend/-/deep-extend-0.6.0.tgz#c4fa7c95404a17a9c3e8ca7e1537312b736330ac"
   integrity sha512-LOHxIOaPYdHlJRtCQfDIVZtfw/ufM8+rVj649RIHzcm/vGwQRXFt6OPqIFWsm2XEMrNIEtWR64sY1LEKD2vAOA==
+
+deepmerge@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.yarnpkg.com/deepmerge/-/deepmerge-4.2.2.tgz#44d2ea3679b8f4d4ffba33f03d865fc1e7bf4955"
+  integrity sha512-FJ3UgI4gIl+PHZm53knsuSFpE+nESMr7M4v9QcgB7S63Kj/6WqMiFQJpBBYz1Pt+66bZpP3Q7Lye0Oo9MPKEdg==
 
 defaults@^1.0.3:
   version "1.0.3"
@@ -6825,6 +6817,11 @@ union-value@^1.0.0:
     get-value "^2.0.6"
     is-extendable "^0.1.1"
     set-value "^2.0.1"
+
+uniq@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/uniq/-/uniq-1.0.1.tgz#b31c5ae8254844a3a8281541ce2b04b865a734ff"
+  integrity sha1-sxxa6CVIRKOoKBVBzisEuGWnNP8=
 
 unique-filename@^1.1.1:
   version "1.1.1"
