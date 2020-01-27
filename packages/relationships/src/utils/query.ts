@@ -12,6 +12,9 @@ export interface Query {
   };
 }
 
+// traverseKeys traverses deeply through an object, adding keys in dot-notation
+// to an array when a value is present. This ensures that a query can
+// be done based on direct key look-ups.
 const traverseKeys = (o: object, acc: Array<string> = [], parent = '') =>
   Object.keys(o).reduce((a, k) => {
     if (typeof o[k] === 'object' && !Array.isArray(o[k])) {
