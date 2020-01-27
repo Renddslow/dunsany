@@ -45,10 +45,13 @@ export default (): Graph => {
       cb,
     });
 
+  const queryNodes = [];
+  nodes.forEach((k, v) => queryNodes.push(v));
+
   return {
     addNode,
     addEdge,
     on,
-    query: query(nodes, edges),
+    query: query(queryNodes, edges),
   };
 };

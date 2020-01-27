@@ -1,0 +1,47 @@
+{
+  "name": "@dunsany/nameday",
+  "version": "0.0.0",
+  "description": "Generate name-generator rulesets.",
+  "keywords": [
+    "names",
+    "generators",
+    "nameday",
+    "parser",
+    "grammar"
+  ],
+  "author": "Matt McElwee <mmcelwee@dmsi.com>",
+  "homepage": "https://github.com/Renddslow/dunsany/tree/master/packages/nameday#readme",
+  "license": "CC-BY-NC-SA-2.0",
+  "repository": "https://github.com/Renddslow/dunsany",
+  "scripts": {
+    "build": "tsc",
+    "test": "ava"
+  },
+  "bugs": {
+    "url": "https://github.com/Renddslow/dunsany/issues"
+  },
+  "main": "dist/index.js",
+  "ava": {
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "concurrency": 4,
+    "timeout": "1m",
+    "babel": false,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist",
+  "dependencies": {
+    "deepmerge": "^4.2.2",
+    "uniq": "^1.0.1"
+  }
+}
