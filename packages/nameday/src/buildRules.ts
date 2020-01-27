@@ -76,7 +76,7 @@ const buildRules = async () => {
   );
 
   const packageIndex = await read(path.join(process.cwd(), 'dist/index.js'));
-  const updatedPackage = `${packageIndex}\nvar data_1 = require('./data');\nmodule.exports = data_1;`;
+  const updatedPackage = `${packageIndex}\nvar data_1 = require('./data');\nexports.data = data_1;`;
   await write(path.join(process.cwd(), 'dist/index.js'), updatedPackage);
 };
 
