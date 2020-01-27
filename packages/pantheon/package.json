@@ -18,6 +18,7 @@
   "version": "0.0.0",
   "description": "A procedural pantheon generator.",
   "repository": "https://github.com/Renddslow/dunsany",
+  "homepage": "https://github.com/Renddslow/dunsany/tree/master/packages/pantheon#readme",
   "author": "Matt McElwee <mubatt@wyopub.com>",
   "license": "CC-BY-NC-SA-2.0",
   "scripts": {
