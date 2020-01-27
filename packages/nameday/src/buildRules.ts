@@ -18,9 +18,9 @@ const prettify = (src) =>
     trailingComma: 'es5',
   });
 
-const readCSV = async (filenname) =>
-  (await promisify(fs.readFile)(filenname)).toString().split('\n');
+const read = promisify(fs.readFile);
 const write = promisify(fs.writeFile);
+const readCSV = async (filenname) => (await read(filenname)).toString().split('\n');
 
 const buildRules = async () => {
   const locales = {};
@@ -74,6 +74,10 @@ const buildRules = async () => {
       ),
     ),
   );
+
+  const packageIndex = await read(path.join(process.cwd(), 'dist/index.js'));
+  const updatedPackage = `${packageIndex}\nvar data_1 = require('./data');\nmodule.exports = data_1;`;
+  await write(path.join(process.cwd(), 'dist/index.js'), updatedPackage);
 };
 
 buildRules();
