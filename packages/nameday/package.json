@@ -14,8 +14,12 @@
   "license": "CC-BY-NC-SA-2.0",
   "repository": "https://github.com/Renddslow/dunsany",
   "scripts": {
+    "prebuild": "del-cli dist",
     "build": "tsc",
-    "test": "ava"
+    "postbuild": "node dist/buildRules.js",
+    "test": "ava",
+    "declare": "tsc -d",
+    "prepare": "yarn build"
   },
   "bugs": {
     "url": "https://github.com/Renddslow/dunsany/issues"
@@ -43,5 +47,11 @@
   "dependencies": {
     "deepmerge": "^4.2.2",
     "uniq": "^1.0.1"
+  },
+  "devDependencies": {
+    "globby": "^11.0.0",
+    "make-dir": "^3.0.0",
+    "pupa": "^2.0.1",
+    "titleize": "^2.1.0"
   }
 }
