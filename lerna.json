@@ -5,7 +5,7 @@
   "version": "independent",
   "command": {
     "publish": {
-      "allowBranch": ["master", "develop", "feature/*"],
+      "allowBranch": ["master"],
       "message": "publishing package(s) to npm [ci skip]"
     }
   }

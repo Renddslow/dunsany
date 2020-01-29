@@ -36,6 +36,8 @@
   },
   "dependencies": {
     "@dunsany/nameday": "file:packages/nameday",
-    "@dunsany/pantheon": "file:packages/pantheon"
+    "@dunsany/pantheon": "file:packages/pantheon",
+    "@dunsany/relationships": "file:packages/relationships",
+    "@dunsany/religion": "file:packages/religion"
   }
 }

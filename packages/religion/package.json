@@ -1,0 +1,47 @@
+{
+  "name": "@dunsany/religion",
+  "version": "0.0.0",
+  "description": "Generate religions based on a pantheon.",
+  "keywords": [
+    "religions",
+    "generators",
+    "religion",
+    "ritual",
+    "deities",
+    "pantheon"
+  ],
+  "author": "Matt McElwee <mmcelwee@dmsi.com>",
+  "homepage": "https://github.com/Renddslow/dunsany/tree/master/packages/religion#readme",
+  "license": "CC-BY-NC-SA-2.0",
+  "repository": "https://github.com/Renddslow/dunsany",
+  "scripts": {
+    "prebuild": "del-cli dist",
+    "build": "tsc",
+    "test": "ava",
+    "declare": "tsc -d",
+    "prepare": "yarn build"
+  },
+  "bugs": {
+    "url": "https://github.com/Renddslow/dunsany/issues"
+  },
+  "main": "dist/index.js",
+  "ava": {
+    "files": [
+      "src/**/*.test.ts"
+    ],
+    "concurrency": 4,
+    "timeout": "1m",
+    "babel": false,
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register"
+    ]
+  },
+  "files": [
+    "dist"
+  ],
+  "types": "dist"
+}
